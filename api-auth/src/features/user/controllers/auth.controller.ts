@@ -5,13 +5,19 @@ class AuthController {
   public async signUp(req: Request, res: Response) {
     const data = await authService.signUp(req.body);
 
-    return res.json({
+    return res.status(HTTP_STATUS.OK).json({
       message: 'Sign up successfully',
       data
     });
   }
 
-  public async signIn(req: Request, res: Response) {}
+  public async signIn(req: Request, res: Response) {
+    const data = await authService.signIn(req.body);
+    return res.status(HTTP_STATUS.OK).json({
+      message: 'Signed in successfully',
+      data
+    });
+  }
 
   public async getCurrentUser(req: Request, res: Response) {}
 
