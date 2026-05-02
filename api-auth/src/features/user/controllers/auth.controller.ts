@@ -1,10 +1,14 @@
 import { Request, Response } from 'express';
 import { authService } from '../services/auth.service';
 import HTTP_STATUS from '~/globals/constants/http.constant';
-
 class AuthController {
   public async signUp(req: Request, res: Response) {
-    await authService.signUp('abc');
+    const data = await authService.signUp(req.body);
+
+    return res.json({
+      message: 'Sign up successfully',
+      data
+    });
   }
 
   public async signIn(req: Request, res: Response) {}
