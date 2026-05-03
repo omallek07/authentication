@@ -50,7 +50,7 @@ class AuthService {
     }
 
     // Check password in userByEmail.password and requested password
-    const isMatchPassword = bcrypt.compare(password, userByEmail.password);
+    const isMatchPassword = await bcrypt.compare(password, userByEmail.password);
 
     if (!isMatchPassword) {
       throw new BadRequestException('Email or password is incorrect');

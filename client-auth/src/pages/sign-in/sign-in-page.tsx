@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Input, Typography } from 'antd';
 import {
@@ -9,14 +10,26 @@ import {
   titleStyle,
 } from './style';
 
+import { signInAction } from '../../lib/actions/users';
+
 const { Title, Paragraph } = Typography;
 
 export default function SignInPage() {
   const [form] = Form.useForm();
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
-    // send the data to your backend
+  const onFinish = async (values: any) => {
+    setErrorMessage('');
+    const { email, password } = values;
+
+    const { message, success } = await signInAction({
+      email,
+      password,
+    });
+
+    if (!success) {
+      setErrorMessage(message);
+    }
   };
 
   return (
@@ -63,6 +76,8 @@ export default function SignInPage() {
               size='large'
             />
           </Form.Item>
+
+          {errorMessage ? <div>{errorMessage}</div> : null}
 
           <Form.Item>
             <Button

@@ -19,6 +19,13 @@ class AuthController {
     });
   }
 
+  public async protected(req: Request, res: Response) {
+    console.log('req.headers.authorization', req.headers.authorization);
+    return res.status(HTTP_STATUS.OK).json({
+      message: 'This is a protected route'
+    });
+  }
+
   public async getCurrentUser(req: Request, res: Response) {}
 
   public async logout(req: Request, res: Response) {}

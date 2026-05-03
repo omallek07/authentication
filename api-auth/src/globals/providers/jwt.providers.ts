@@ -12,6 +12,10 @@ class JwtProvider {
       expiresIn: '1h'
     });
   }
+
+  public async verifyJWT(token: string) {
+    return JWT.verify(token, process.env.JWT_SECRET!) as UserPayload;
+  }
 }
 
 export const jwtProvider: JwtProvider = new JwtProvider();
