@@ -5,6 +5,7 @@ import { Avatar, Card, Divider, Form, Input, Typography, message } from 'antd';
 import { useState } from 'react';
 import { useUserStore } from '../../stores';
 import Header from '../../components/Header';
+import LogoutButton from '../../components/LogoutButton';
 
 const { Title, Paragraph, Text } = Typography;
 const { TextArea } = Input;
@@ -68,6 +69,14 @@ export default function ProfilePage() {
           </div>
         </div>
       </Card>
+      <div
+        style={{
+          textAlign: 'right',
+          marginTop: '10px',
+        }}
+      >
+        <LogoutButton />
+      </div>
     </div>
   );
 }

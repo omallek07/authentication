@@ -14,6 +14,14 @@ interface IUserPayload {
   email: string;
   password: string;
 }
+
+interface ISignInResponse {
+  data: {
+    accessToken: string;
+    user: IUser;
+  };
+}
+
 interface IAuth {
   accessToken: string;
   isAuthenticated: boolean;
