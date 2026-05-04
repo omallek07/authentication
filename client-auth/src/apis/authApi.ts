@@ -1,11 +1,18 @@
 import axiosInstance from '.';
 
+interface ISignInResponse {
+  data: {
+    accessToken: string;
+    user: IUser;
+  };
+}
+
 export const authApi = {
-  signIn({ email, password }: { email: string; password: string }) {
-    return axiosInstance.post('/auth/sign-in', {
-      email,
-      password,
-    });
+  signIn(payload: IUserPayload) {
+    return axiosInstance.post<unknown, ISignInResponse>(
+      '/auth/sign-in',
+      payload,
+    );
   },
   access() {
     return axiosInstance.get('/auth/protected');

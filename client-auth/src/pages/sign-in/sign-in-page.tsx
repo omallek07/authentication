@@ -25,17 +25,18 @@ export default function SignInPage() {
 
   const navigate = useNavigate();
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: IUserPayload) => {
     const { email, password } = values;
 
-    const data = await authApi.signIn({
+    const res = await authApi.signIn({
       email,
       password,
     });
 
-    const accessToken = data.data.data.accessToken;
+    const accessToken = res.data.accessToken;
     const isAuthenticated = true;
-    const user = data.data.data.user;
+    const user = res.data.user;
+
     setAuth({
       isAuthenticated,
       accessToken,

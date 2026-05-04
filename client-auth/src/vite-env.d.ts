@@ -9,6 +9,11 @@ interface IUser {
   name: string;
   email: string;
 }
+
+interface IUserPayload {
+  email: string;
+  password: string;
+}
 interface IAuth {
   accessToken: string;
   isAuthenticated: boolean;
