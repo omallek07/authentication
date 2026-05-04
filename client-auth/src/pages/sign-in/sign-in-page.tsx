@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Input, Typography } from 'antd';
 import {
@@ -10,26 +9,41 @@ import {
   titleStyle,
 } from './style';
 
-import { signInAction } from '../../lib/actions/users';
+import { authApi } from '../../apis/authApi';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router';
+
+import { useAuthStore, useUserStore } from '../../stores';
 
 const { Title, Paragraph } = Typography;
 
 export default function SignInPage() {
   const [form] = Form.useForm();
-  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const setAuth = useAuthStore((state) => state.setAuth);
+  const setUser = useUserStore((state) => state.setUser);
+
+  const navigate = useNavigate();
 
   const onFinish = async (values: any) => {
-    setErrorMessage('');
     const { email, password } = values;
 
-    const { message, success } = await signInAction({
+    const data = await authApi.signIn({
       email,
       password,
     });
 
-    if (!success) {
-      setErrorMessage(message);
-    }
+    const accessToken = data.data.data.accessToken;
+    const isAuthenticated = true;
+    const user = data.data.data.user;
+    setAuth({
+      isAuthenticated,
+      accessToken,
+    });
+    setUser(user);
+
+    toast.success('Login successfully!');
+    navigate('/profile');
   };
 
   return (
@@ -76,8 +90,6 @@ export default function SignInPage() {
               size='large'
             />
           </Form.Item>
-
-          {errorMessage ? <div>{errorMessage}</div> : null}
 
           <Form.Item>
             <Button

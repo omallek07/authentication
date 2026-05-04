@@ -3,6 +3,8 @@
 import { MailOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Card, Divider, Form, Input, Typography, message } from 'antd';
 import { useState } from 'react';
+import { useUserStore } from '../../stores';
+import Header from '../../components/Header';
 
 const { Title, Paragraph, Text } = Typography;
 const { TextArea } = Input;
@@ -10,10 +12,12 @@ const { TextArea } = Input;
 export default function ProfilePage() {
   const [form] = Form.useForm();
 
+  const user = useUserStore((state) => state.user);
+
   // Mock user data
   const [userData, setUserData] = useState({
-    name: 'Alex Johnson',
-    email: 'alex.johnson@example.com',
+    name: user?.name ?? '',
+    email: user?.email ?? '',
     bio: 'Frontend developer passionate about creating intuitive user experiences. I love working with React and exploring new technologies.',
     avatarUrl: '/placeholder.svg?height=200&width=200',
   });
@@ -32,6 +36,7 @@ export default function ProfilePage() {
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '24px' }}>
+      <Header />
       <Card style={{ borderRadius: '8px' }}>
         <div
           style={{
