@@ -1,27 +1,39 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+type SetUser = {
+  user: IUser;
+  isAuthenticated: boolean;
+  accessToken: string;
+};
+
 type UserStoreState = {
   user: IUser | null;
-  setUser: (user: IUser) => void;
+  isAuthenticated: boolean;
+  accessToken: string;
+  setUser: (data: SetUser) => void;
   resetUser: () => void;
+};
+
+const initialState = {
+  user: null,
+  isAuthenticated: false,
+  accessToken: '',
 };
 
 export const useUserStore = create<UserStoreState>()(
   persist(
     (set) => ({
-      user: null,
-      setUser: (user: IUser) => set({ user }),
+      ...initialState,
+      setUser: ({ user, isAuthenticated, accessToken }: SetUser) =>
+        set({ user, isAuthenticated, accessToken }),
       resetUser: () =>
         set({
-          user: null,
+          ...initialState,
         }),
     }),
     {
       name: 'user',
-      partialize: (state) => ({
-        user: state?.user || null,
-      }),
     },
   ),
 );

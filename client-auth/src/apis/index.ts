@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { router } from '../main';
+import { useUserStore } from '../stores';
 
 const API_URL = import.meta.env.VITE_API_URL;
 const API_VERSION = import.meta.env.VITE_API_VERSION;
@@ -13,11 +15,17 @@ const axiosInstance = axios.create({
 
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
-  function (config) {
+  async function (config) {
     // Do something before request is sent
 
     if (!whiteList.includes(location.pathname)) {
-      config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`;
+      const auth = await JSON.parse(localStorage.getItem('access') ?? '');
+
+      console.log('auth', auth);
+
+      const accessToken = auth?.state?.access?.accessToken ?? '';
+
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
     return config;
@@ -36,6 +44,10 @@ axiosInstance.interceptors.response.use(
     return response.data;
   },
   function (error) {
+    if (error.status === 401) {
+      router.navigate('/sign-in');
+      useUserStore.getState().resetUser();
+    }
     toast.error(error?.response.data?.message);
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error

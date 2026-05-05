@@ -13,14 +13,13 @@ import { authApi } from '../../apis/authApi';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 
-import { useAuthStore, useUserStore } from '../../stores';
+import { useUserStore } from '../../stores';
 
 const { Title, Paragraph } = Typography;
 
 export default function SignInPage() {
   const [form] = Form.useForm();
 
-  const setAuth = useAuthStore((state) => state.setAuth);
   const setUser = useUserStore((state) => state.setUser);
 
   const navigate = useNavigate();
@@ -37,11 +36,11 @@ export default function SignInPage() {
     const isAuthenticated = true;
     const user = res.data.user;
 
-    setAuth({
+    setUser({
+      user,
       isAuthenticated,
       accessToken,
     });
-    setUser(user);
 
     toast.success('Login successfully!');
     navigate('/profile');

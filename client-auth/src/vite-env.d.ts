@@ -9,7 +9,6 @@ interface IUser {
   name: string;
   email: string;
 }
-
 interface IUserPayload {
   email: string;
   password: string;
@@ -20,9 +19,4 @@ interface ISignInResponse {
     accessToken: string;
     user: IUser;
   };
-}
-
-interface IAuth {
-  accessToken: string;
-  isAuthenticated: boolean;
 }

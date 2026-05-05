@@ -9,8 +9,9 @@ import SignInPage from './pages/sign-in/sign-in-page.tsx';
 import SignUpPage from './pages/sign-up/sign-up-page.tsx';
 import AccessPage from './pages/access/access-page.tsx';
 import ProfilePage from './pages/profile/profile-page.tsx';
+import ProtectedRoute from './routes/ProtectedRoute.tsx';
 
-const router = createBrowserRouter([
+export const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
@@ -25,11 +26,19 @@ const router = createBrowserRouter([
   },
   {
     path: '/access',
-    element: <AccessPage />,
+    element: (
+      <ProtectedRoute>
+        <AccessPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/profile',
-    element: <ProfilePage />,
+    element: (
+      <ProtectedRoute>
+        <ProfilePage />
+      </ProtectedRoute>
+    ),
   },
 ]);
 
