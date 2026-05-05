@@ -10,19 +10,32 @@ import SignUpPage from './pages/sign-up/sign-up-page.tsx';
 import AccessPage from './pages/access/access-page.tsx';
 import ProfilePage from './pages/profile/profile-page.tsx';
 import ProtectedRoute from './routes/ProtectedRoute.tsx';
+import UnauthorizedRoute from './routes/UnauthorizedRoute.tsx';
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: (
+      <ProtectedRoute>
+        <App />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/sign-in',
-    element: <SignInPage />,
+    element: (
+      <UnauthorizedRoute>
+        <SignInPage />
+      </UnauthorizedRoute>
+    ),
   },
   {
     path: '/sign-up',
-    element: <SignUpPage />,
+    element: (
+      <UnauthorizedRoute>
+        <SignUpPage />
+      </UnauthorizedRoute>
+    ),
   },
   {
     path: '/access',

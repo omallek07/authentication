@@ -8,15 +8,27 @@ import {
   iconStyle,
   titleStyle,
 } from './style';
+import { Link, useNavigate } from 'react-router';
+import { authApi } from '../../apis/authApi';
+import { useUserStore } from '../../stores';
 
 const { Title, Paragraph } = Typography;
 
 export default function SignUpPage() {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
+  const setUser = useUserStore((state) => state.setUser);
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: IUserSignUpPayload) => {
     console.log('Success:', values);
-    // send the data to your backend
+    const res = await authApi.signUp(values);
+    setUser({
+      isAuthenticated: true,
+      accessToken: res.data.accessToken,
+      user: res.data.user,
+    });
+
+    navigate('/profile');
   };
 
   return (
@@ -92,7 +104,7 @@ export default function SignUpPage() {
 
         <div style={footerStyle}>
           <Paragraph style={{ color: 'rgba(0, 0, 0, 0.45)' }}>
-            Already have an account? <a href='/login'>Log in</a>
+            Already have an account? <Link to='/sign-in'>Log in</Link>
           </Paragraph>
         </div>
       </Card>

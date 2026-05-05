@@ -47,6 +47,7 @@ axiosInstance.interceptors.response.use(
     if (error.status === 401) {
       router.navigate('/sign-in');
       useUserStore.getState().resetUser();
+      return Promise.reject(error);
     }
     toast.error(error?.response.data?.message);
     // Any status codes that falls outside the range of 2xx cause this function to trigger

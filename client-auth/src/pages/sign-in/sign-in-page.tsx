@@ -11,7 +11,7 @@ import {
 
 import { authApi } from '../../apis/authApi';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 import { useUserStore } from '../../stores';
 
@@ -24,7 +24,7 @@ export default function SignInPage() {
 
   const navigate = useNavigate();
 
-  const onFinish = async (values: IUserPayload) => {
+  const onFinish = async (values: IUserSignInPayload) => {
     const { email, password } = values;
 
     const res = await authApi.signIn({
@@ -32,14 +32,10 @@ export default function SignInPage() {
       password,
     });
 
-    const accessToken = res.data.accessToken;
-    const isAuthenticated = true;
-    const user = res.data.user;
-
     setUser({
-      user,
-      isAuthenticated,
-      accessToken,
+      isAuthenticated: true,
+      accessToken: res.data.accessToken,
+      user: res.data.user,
     });
 
     toast.success('Login successfully!');
@@ -105,7 +101,7 @@ export default function SignInPage() {
 
         <div style={footerStyle}>
           <Paragraph style={{ color: 'rgba(0, 0, 0, 0.45)' }}>
-            Don't have an account? <a href='/login'>Sign Up</a>
+            Don't have an account? <Link to='/sign-up'>Sign Up</Link>
           </Paragraph>
         </div>
       </Card>

@@ -1,9 +1,15 @@
 import axiosInstance from '.';
 
 export const authApi = {
-  signIn(payload: IUserPayload) {
+  signIn(payload: IUserSignInPayload) {
     return axiosInstance.post<unknown, ISignInResponse>(
       '/auth/sign-in',
+      payload,
+    );
+  },
+  signUp(payload: IUserSignUpPayload) {
+    return axiosInstance.post<unknown, ISignInResponse>(
+      '/auth/sign-up',
       payload,
     );
   },

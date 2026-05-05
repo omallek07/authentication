@@ -6,7 +6,7 @@ class AuthController {
     const data = await authService.signUp(req.body);
 
     return res.status(HTTP_STATUS.OK).json({
-      message: 'Sign up successfully',
+      message: 'Signed Up successfully',
       data
     });
   }

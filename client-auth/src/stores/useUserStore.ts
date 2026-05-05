@@ -1,17 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-type SetUser = {
-  user: IUser;
-  isAuthenticated: boolean;
-  accessToken: string;
-};
-
 type UserStoreState = {
   user: IUser | null;
   isAuthenticated: boolean;
   accessToken: string;
-  setUser: (data: SetUser) => void;
+};
+
+type UserStoreActions = {
+  setUser: (data: UserStoreState) => void;
   resetUser: () => void;
 };
 
@@ -21,11 +18,11 @@ const initialState = {
   accessToken: '',
 };
 
-export const useUserStore = create<UserStoreState>()(
+export const useUserStore = create<UserStoreState & UserStoreActions>()(
   persist(
     (set) => ({
       ...initialState,
-      setUser: ({ user, isAuthenticated, accessToken }: SetUser) =>
+      setUser: ({ user, isAuthenticated, accessToken }: UserStoreState) =>
         set({ user, isAuthenticated, accessToken }),
       resetUser: () =>
         set({
