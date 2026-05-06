@@ -2,6 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { router } from '../main';
 import { useUserStore } from '../stores';
+import { authApi } from './authApi';
 
 const API_URL = import.meta.env.VITE_API_URL;
 const API_VERSION = import.meta.env.VITE_API_VERSION;
@@ -17,14 +18,11 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   async function (config) {
     // Do something before request is sent
+    const user = localStorage.getItem('user');
 
-    if (!whiteList.includes(location.pathname)) {
-      const auth = await JSON.parse(localStorage.getItem('access') ?? '');
-
-      console.log('auth', auth);
-
-      const accessToken = auth?.state?.access?.accessToken ?? '';
-
+    if (user && !whiteList.includes(location.pathname)) {
+      const parsedUser = JSON.parse(user);
+      const accessToken = parsedUser?.state?.accessToken ?? '';
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
@@ -43,13 +41,46 @@ axiosInstance.interceptors.response.use(
     // Do something with response data
     return response.data;
   },
-  function (error) {
-    if (error.status === 401) {
+  async function (error) {
+    const message = error?.response?.data?.message;
+    const originalRequest = error.config;
+
+    if (message === 'TOKEN_EXPIRED') {
+      const refreshToken = useUserStore.getState().refreshToken;
+      if (!refreshToken) {
+        router.navigate('/sign-in');
+        useUserStore.getState().resetUser();
+        return Promise.reject(error);
+      }
+
+      const resRT = await authApi.refreshToken({
+        refreshToken,
+      });
+      const newAccessToken = resRT.data.accessToken;
+
+      // Update user store with new accessToken
+      const user = useUserStore.getState().user;
+      const setUser = useUserStore.getState().setUser;
+
+      setUser({
+        user,
+        refreshToken,
+        isAuthenticated: true,
+        accessToken: newAccessToken,
+      });
+
+      // Retry (send previous failed request again)
+      originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+      return axiosInstance(originalRequest);
+    }
+
+    if (message === 'TOKEN_INVALID' || message === 'NO_TOKEN') {
       router.navigate('/sign-in');
       useUserStore.getState().resetUser();
       return Promise.reject(error);
     }
-    toast.error(error?.response.data?.message);
+
+    toast.error(error?.response?.data?.message);
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     return Promise.reject(error);

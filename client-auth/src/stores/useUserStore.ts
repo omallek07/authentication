@@ -5,10 +5,11 @@ type UserStoreState = {
   user: IUser | null;
   isAuthenticated: boolean;
   accessToken: string;
+  refreshToken: string;
 };
 
 type UserStoreActions = {
-  setUser: (data: UserStoreState) => void;
+  setUser: (userState: UserStoreState) => void;
   resetUser: () => void;
 };
 
@@ -16,14 +17,14 @@ const initialState = {
   user: null,
   isAuthenticated: false,
   accessToken: '',
+  refreshToken: '',
 };
 
 export const useUserStore = create<UserStoreState & UserStoreActions>()(
   persist(
     (set) => ({
       ...initialState,
-      setUser: ({ user, isAuthenticated, accessToken }: UserStoreState) =>
-        set({ user, isAuthenticated, accessToken }),
+      setUser: (userState: UserStoreState) => set({ ...userState }),
       resetUser: () =>
         set({
           ...initialState,

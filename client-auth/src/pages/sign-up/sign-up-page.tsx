@@ -20,11 +20,11 @@ export default function SignUpPage() {
   const setUser = useUserStore((state) => state.setUser);
 
   const onFinish = async (values: IUserSignUpPayload) => {
-    console.log('Success:', values);
     const res = await authApi.signUp(values);
     setUser({
       isAuthenticated: true,
       accessToken: res.data.accessToken,
+      refreshToken: res.data.refreshToken,
       user: res.data.user,
     });
 

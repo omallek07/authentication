@@ -20,9 +20,20 @@ class AuthController {
   }
 
   public async protected(req: Request, res: Response) {
-    console.log('req.headers.authorization', req.headers.authorization);
     return res.status(HTTP_STATUS.OK).json({
-      message: 'This is a protected route'
+      message: 'This is a protected route',
+      data: req.currentUser
+    });
+  }
+
+  public async refreshToken(req: Request, res: Response) {
+    const accessToken = await authService.refreshToken(req.body);
+
+    return res.status(HTTP_STATUS.OK).json({
+      message: 'Generated a new refresh token',
+      data: {
+        accessToken
+      }
     });
   }
 

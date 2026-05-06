@@ -17,7 +17,17 @@ interface IUserSignInPayload {
 interface ISignInResponse {
   data: {
     accessToken: string;
+    refreshToken: string;
     user: IUser;
+  };
+}
+
+interface IRefreshTokenPayload {
+  refreshToken: string;
+}
+interface IRefreshTokenResponse {
+  data: {
+    accessToken: string;
   };
 }
 
