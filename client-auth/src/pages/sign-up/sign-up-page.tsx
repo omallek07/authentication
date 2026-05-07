@@ -24,7 +24,6 @@ export default function SignUpPage() {
     setUser({
       isAuthenticated: true,
       accessToken: res.data.accessToken,
-      refreshToken: res.data.refreshToken,
       user: res.data.user,
     });
 

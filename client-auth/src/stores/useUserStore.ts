@@ -5,7 +5,6 @@ type UserStoreState = {
   user: IUser | null;
   isAuthenticated: boolean;
   accessToken: string;
-  refreshToken: string;
 };
 
 type UserStoreActions = {
@@ -17,7 +16,6 @@ const initialState = {
   user: null,
   isAuthenticated: false,
   accessToken: '',
-  refreshToken: '',
 };
 
 export const useUserStore = create<UserStoreState & UserStoreActions>()(

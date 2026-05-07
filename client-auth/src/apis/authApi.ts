@@ -16,10 +16,12 @@ export const authApi = {
   access() {
     return axiosInstance.get('/auth/protected');
   },
-  refreshToken(payload: IRefreshTokenPayload) {
+  refreshToken() {
     return axiosInstance.post<unknown, IRefreshTokenResponse>(
       '/auth/refresh-token',
-      payload,
     );
+  },
+  logout() {
+    return axiosInstance.post('/auth/logout');
   },
 };

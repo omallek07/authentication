@@ -15,7 +15,6 @@ export default function ProfilePage() {
 
   const user = useUserStore((state) => state.user);
 
-  // Mock user data
   const [userData, setUserData] = useState({
     name: user?.name ?? '',
     email: user?.email ?? '',

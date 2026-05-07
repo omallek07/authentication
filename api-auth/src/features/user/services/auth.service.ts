@@ -76,9 +76,7 @@ class AuthService {
     };
   }
 
-  public async refreshToken(requestBody: any) {
-    const { refreshToken } = requestBody;
-
+  public async refreshToken(refreshToken: string) {
     if (!refreshToken) {
       throw new BadRequestException('Please provide refresh token');
     }
@@ -100,7 +98,10 @@ class AuthService {
 
     const accessToken = await jwtProvider.generateJWT(jwtPayload);
 
-    return accessToken;
+    return {
+      accessToken,
+      user: jwtPayload
+    };
   }
 }
 
