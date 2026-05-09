@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { IRole } from '~/features/role/models/role.model';
 
 export interface IUser {
   name: string;
@@ -6,6 +7,7 @@ export interface IUser {
   password: string;
   resetPasswordToken?: string;
   resetPasswordExpired?: number;
+  roles?: IRole[];
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -28,7 +30,13 @@ const userSchema = new mongoose.Schema<IUser>({
   resetPasswordExpired: {
     type: Number,
     default: null
-  }
+  },
+  roles: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'Role'
+    }
+  ]
 });
 
 export const UserModel = mongoose.model<IUser>('user', userSchema);
