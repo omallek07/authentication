@@ -20,7 +20,7 @@ const { Title, Paragraph } = Typography;
 export default function SignInPage() {
   const [form] = Form.useForm();
 
-  const setUser = useUserStore((state) => state.setUser);
+  const setUserStore = useUserStore((state) => state.setUserStore);
 
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ export default function SignInPage() {
       password,
     });
 
-    setUser({
+    setUserStore({
       isAuthenticated: true,
       accessToken: res.data.accessToken,
       user: res.data.user,

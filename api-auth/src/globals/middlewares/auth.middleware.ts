@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { ForbiddenException, UnAuthorizedException } from '../cores/error.core';
-import { jwtProvider } from '../providers/jwt.providers';
+import { jwtProvider } from '../providers/jwt.provider';
 import JWT from 'jsonwebtoken';
 class AuthMiddleware {
   public async verifyUser(req: Request, res: Response, next: NextFunction) {

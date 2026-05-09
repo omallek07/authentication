@@ -5,6 +5,13 @@ interface UserPayload {
   role?: string;
 }
 
+interface ISendEmailPayload {
+  from?: string;
+  to: string;
+  subject: string;
+  html: string;
+}
+
 declare namespace Express {
   export interface Request {
     currentUser: UserPayload;

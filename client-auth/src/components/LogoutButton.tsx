@@ -5,11 +5,11 @@ import { authApi } from '../apis/authApi';
 
 export default function LogoutButton() {
   const navigate = useNavigate();
-  const resetUser = useUserStore((state) => state.resetUser);
+  const resetUserStore = useUserStore((state) => state.resetUserStore);
 
   const onClick = async () => {
     await authApi.logout();
-    resetUser();
+    resetUserStore();
     navigate('/sign-in');
   };
 

@@ -24,4 +24,16 @@ export const authApi = {
   logout() {
     return axiosInstance.post('/auth/logout');
   },
+  resetPassword(payload: IResetPasswordPayload) {
+    return axiosInstance.post('/auth/reset-password', payload);
+  },
+  forgotPassword(payload: { email: string }) {
+    return axiosInstance.post('/auth/forgot-password', payload);
+  },
+  changeProfile(payload: { name: string }) {
+    return axiosInstance.put<unknown, IUpdateUserProfileResponse>(
+      '/auth/update-profile',
+      payload,
+    );
+  },
 };

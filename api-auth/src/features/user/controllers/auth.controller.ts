@@ -63,6 +63,31 @@ class AuthController {
     res.clearCookie('refreshToken');
     res.status(HTTP_STATUS.OK).json({ message: 'Logout Successful' });
   }
+
+  public async forgotPassword(req: Request, res: Response) {
+    await authService.sendForgotPasswordToEmail(req.body);
+    res.status(HTTP_STATUS.OK).json({
+      message: 'Reset password sent to your email'
+    });
+  }
+
+  public async resetPassword(req: Request, res: Response) {
+    await authService.resetPassword(req.body);
+
+    res.status(HTTP_STATUS.OK).json({
+      message: 'Password reset successfully'
+    });
+  }
+
+  public async updateProfile(req: Request, res: Response) {
+    const { name } = await authService.updateProfile(req.body, req.currentUser);
+    return res.status(HTTP_STATUS.OK).json({
+      message: 'User profile updated successfully',
+      data: {
+        name
+      }
+    });
+  }
 }
 
 export const authController: AuthController = new AuthController();

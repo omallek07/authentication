@@ -17,11 +17,11 @@ const { Title, Paragraph } = Typography;
 export default function SignUpPage() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const setUser = useUserStore((state) => state.setUser);
+  const setUserStore = useUserStore((state) => state.setUserStore);
 
   const onFinish = async (values: IUserSignUpPayload) => {
     const res = await authApi.signUp(values);
-    setUser({
+    setUserStore({
       isAuthenticated: true,
       accessToken: res.data.accessToken,
       user: res.data.user,

@@ -32,3 +32,14 @@ interface IUserSignUpPayload {
   email: string;
   password: string;
 }
+
+interface IResetPasswordPayload {
+  email: string;
+  resetToken: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
+interface IUpdateUserProfileResponse {
+  data: Pick<IUser, 'name'>;
+}

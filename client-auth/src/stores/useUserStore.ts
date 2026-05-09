@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+type UpdateUserData = {
+  name: string;
+};
+
 type UserStoreState = {
   user: IUser | null;
   isAuthenticated: boolean;
@@ -8,8 +12,9 @@ type UserStoreState = {
 };
 
 type UserStoreActions = {
-  setUser: (userState: UserStoreState) => void;
-  resetUser: () => void;
+  setUserStore: (userStoreState: UserStoreState) => void;
+  resetUserStore: () => void;
+  updateUserData: (userData: UpdateUserData) => void;
 };
 
 const initialState = {
@@ -22,8 +27,18 @@ export const useUserStore = create<UserStoreState & UserStoreActions>()(
   persist(
     (set) => ({
       ...initialState,
-      setUser: (userState: UserStoreState) => set({ ...userState }),
-      resetUser: () =>
+      setUserStore: (userStoreState: UserStoreState) =>
+        set({ ...userStoreState }),
+      updateUserData: ({ name }) =>
+        set((state) => ({
+          user: !state.user
+            ? null
+            : {
+                ...state.user,
+                name,
+              },
+        })),
+      resetUserStore: () =>
         set({
           ...initialState,
         }),

@@ -1,9 +1,11 @@
 import mongoose from 'mongoose';
 
-interface IUser {
+export interface IUser {
   name: string;
   email: string;
   password: string;
+  resetPasswordToken?: string;
+  resetPasswordExpired?: number;
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -18,6 +20,14 @@ const userSchema = new mongoose.Schema<IUser>({
   password: {
     type: String,
     required: true
+  },
+  resetPasswordToken: {
+    type: String,
+    default: null
+  },
+  resetPasswordExpired: {
+    type: Number,
+    default: null
   }
 });
 

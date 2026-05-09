@@ -1,9 +1,11 @@
 import { BadRequestException, NotFoundException } from '~/globals/cores/error.core';
 import { UserModel } from '../models/user.model';
 import bcrypt from 'bcrypt';
-import { jwtProvider } from '~/globals/providers/jwt.providers';
-
+import { jwtProvider } from '~/globals/providers/jwt.provider';
+import crypto from 'crypto';
+import { IUser } from '../models/user.model';
 import { SignupReq, SigninReq } from '../types';
+import { mailProvider } from '~/globals/providers/mail.provider';
 class AuthService {
   public async signUp(requestBody: SignupReq) {
     const { name, email, password } = requestBody;
@@ -102,6 +104,80 @@ class AuthService {
       accessToken,
       user: jwtPayload
     };
+  }
+
+  public async sendForgotPasswordToEmail(requestBody: any) {
+    const { email } = requestBody;
+    // Make userByEmail exist
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      throw new NotFoundException('User does not exist');
+    }
+    // Create a resetPasswordToken
+    const resetPasswordToken = crypto.randomBytes(10).toString('hex');
+    // Store resetPasswordExpired (10m)
+    const resetPasswordExpired = Date.now() + 10 * 1000 * 60;
+
+    user.resetPasswordToken = resetPasswordToken;
+    user.resetPasswordExpired = resetPasswordExpired;
+    await user.save();
+
+    const resetLink = `http://localhost:5173/reset-password?email=${user.email}&resetToken=${user.resetPasswordToken}`;
+
+    const html = `
+      <h1>Your Reset Password Request</h1>
+      <p>Please click into this link to reset the password: <a href=${resetLink}>Click Here</a>
+    `;
+
+    // Send email
+    mailProvider.sendEmail({
+      to: user.email,
+      subject: 'Your Reset Password Request',
+      html
+    });
+  }
+
+  public async resetPassword(requestBody: any) {
+    const { email, resetToken, newPassword, confirmNewPassword } = requestBody;
+
+    if (newPassword != confirmNewPassword) {
+      throw new BadRequestException('Passwords do not match');
+    }
+
+    const user = await UserModel.findOne({
+      email,
+      resetPasswordToken: resetToken
+    });
+
+    if (!user?.resetPasswordToken || !user?.resetPasswordToken) {
+      throw new BadRequestException('Please reset password again!');
+    }
+
+    if (!user) {
+      throw new BadRequestException('User does not exist');
+    }
+
+    if (Date.now() > user.resetPasswordExpired!) {
+      throw new BadRequestException('Your reset password request already expired. Please try again.');
+    }
+
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpired = undefined;
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+  }
+  public async updateProfile(requestBody: any, currentUser: UserPayload): Promise<IUser> {
+    const { name } = requestBody;
+
+    const user = await UserModel.findById(currentUser._id);
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    user.name = name;
+    await user.save();
+    return user;
   }
 }
 

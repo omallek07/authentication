@@ -1,19 +1,49 @@
 import { CheckOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Input, Typography } from 'antd';
 import { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router';
+import { toast } from 'react-toastify';
+import { authApi } from '../../apis/authApi';
 
 const { Title, Paragraph } = Typography;
 
 export default function ResetPasswordPage() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
 
-  const userEmail = 'user@example.com';
+  const navigate = useNavigate();
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = async (values: {
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }) => {
     setLoading(true);
 
+    const email = searchParams.get('email');
+    const resetToken = searchParams.get('resetToken');
+
+    if (!email || !resetToken) {
+      toast.error('Please click forgot password first! ');
+      navigate('/forgot-password');
+      return;
+    }
+
+    const payload = {
+      email,
+      resetToken,
+      newPassword: values.password,
+      confirmNewPassword: values.confirmPassword,
+    };
     // call to reset password
+    try {
+      await authApi.resetPassword(payload);
+      toast.success('Reset password successfully');
+      navigate('/sign-in');
+    } catch (error) {
+      setLoading(false);
+    }
   };
 
   return (
@@ -27,7 +57,11 @@ export default function ResetPasswordPage() {
         </div>
 
         <Form form={form} layout='vertical' onFinish={handleSubmit}>
-          <Form.Item name='email' label='Email' initialValue={userEmail}>
+          <Form.Item
+            name='email'
+            label='Email'
+            initialValue={searchParams.get('email') || ''}
+          >
             <Input prefix={<MailOutlined />} disabled size='large' />
           </Form.Item>
 
@@ -60,7 +94,7 @@ export default function ResetPasswordPage() {
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    new Error('The two passwords do not match')
+                    new Error('The two passwords do not match'),
                   );
                 },
               }),

@@ -46,12 +46,16 @@ axiosInstance.interceptors.response.use(
     const message = error?.response?.data?.message;
     const originalRequest = error.config;
 
+    if (error?.status === 404) {
+      toast.error(message);
+    }
+
     if (message === 'TOKEN_EXPIRED') {
       try {
         const resRT = await authApi.refreshToken();
         // Update user store with new accessToken and user data
         const { accessToken: newAccessToken, user } = resRT.data;
-        useUserStore.getState().setUser({
+        useUserStore.getState().setUserStore({
           user,
           isAuthenticated: true,
           accessToken: newAccessToken,
@@ -63,14 +67,14 @@ axiosInstance.interceptors.response.use(
       } catch (errorRefreshToken) {
         toast.error('Please login again!');
         router.navigate('/sign-in');
-        useUserStore.getState().resetUser();
+        useUserStore.getState().resetUserStore();
         return Promise.reject(error);
       }
     }
 
     if (message === 'TOKEN_INVALID' || message === 'NO_TOKEN') {
       router.navigate('/sign-in');
-      useUserStore.getState().resetUser();
+      useUserStore.getState().resetUserStore();
       return Promise.reject(error);
     }
 
