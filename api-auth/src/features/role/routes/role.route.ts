@@ -5,5 +5,6 @@ import { roleController } from '../controllers/role.controllers';
 const roleRoute = express.Router();
 
 roleRoute.post('/seed-data', asyncWrapper(roleController.seedData));
+roleRoute.post('/add-role/:userId', asyncWrapper(roleController.addRoleToUser));
 
 export default roleRoute;

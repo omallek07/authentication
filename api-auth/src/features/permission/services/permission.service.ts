@@ -2,13 +2,20 @@ import { PermissionModel } from '../models/permission.model';
 
 class PermissionService {
   public async seedData() {
+    const permissionCollections = await PermissionModel.estimatedDocumentCount({});
+
+    // Clear database
+    if (Number(permissionCollections) > 0) {
+      await PermissionModel.deleteMany({});
+    }
+
     const p1 = new PermissionModel({
       name: 'VIEW_DASHBOARD',
       description: 'Allow user to view dashboard'
     });
     const p2 = new PermissionModel({
-      name: 'VIEW_PROFILE',
-      description: 'Allow user to view profile'
+      name: 'VIEW_CLASS',
+      description: 'Allow user to view class'
     });
     const p3 = new PermissionModel({
       name: 'ADD_CLASS',

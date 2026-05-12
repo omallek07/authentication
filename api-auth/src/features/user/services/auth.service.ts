@@ -6,6 +6,7 @@ import crypto from 'crypto';
 import { IUser } from '../models/user.model';
 import { SignupReq, SigninReq } from '../types';
 import { mailProvider } from '~/globals/providers/mail.provider';
+import { RoleModel } from '~/features/role/models/role.model';
 class AuthService {
   public async signUp(requestBody: SignupReq) {
     const { name, email, password } = requestBody;
@@ -18,18 +19,30 @@ class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const teacherRole = await RoleModel.findOne({
+      name: 'teacher'
+    });
+
+    if (!teacherRole) {
+      throw new NotFoundException('Role does not exist');
+    }
+
     const user = new UserModel({
       name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      roles: [teacherRole]
     });
+
+    const userRoles = user.roles?.map((role) => role.name) ?? [];
 
     await user.save();
 
     const jwtPayload = {
       _id: user._id.toString(),
       name: user.name,
-      email: user.email
+      email: user.email,
+      roles: userRoles
     };
 
     const accessToken = await jwtProvider.generateJWT(jwtPayload);
@@ -49,7 +62,7 @@ class AuthService {
 
     const userByEmail = await UserModel.findOne({
       email
-    });
+    }).populate('roles');
 
     if (!userByEmail) {
       throw new BadRequestException('Email or password is incorrect');
@@ -65,7 +78,8 @@ class AuthService {
     const jwtPayload = {
       _id: userByEmail._id.toString(),
       name: userByEmail.name,
-      email: userByEmail.email
+      email: userByEmail.email,
+      roles: userByEmail.roles?.map((role) => role.name) ?? []
     };
 
     const accessToken = await jwtProvider.generateJWT(jwtPayload);
@@ -85,7 +99,7 @@ class AuthService {
 
     const userDecoded = await jwtProvider.verifyRefreshToken(refreshToken);
 
-    const user = await UserModel.findById(userDecoded._id);
+    const user = await UserModel.findById(userDecoded._id).populate('roles');
 
     if (!user) {
       throw new NotFoundException('User does not exist');
@@ -95,7 +109,8 @@ class AuthService {
     const jwtPayload = {
       _id: user._id.toString(),
       name: user.name,
-      email: user.email
+      email: user.email,
+      roles: user.roles?.map((role) => role.name) ?? []
     };
 
     const accessToken = await jwtProvider.generateJWT(jwtPayload);

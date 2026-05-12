@@ -1,5 +1,7 @@
 import { IPermission, PermissionModel } from '~/features/permission/models/permission.model';
 import { RoleModel } from '../models/role.model';
+import { NotFoundException } from '~/globals/cores/error.core';
+import { UserModel } from '~/features/user/models/user.model';
 
 type Role = 'ADMIN' | 'MANAGER' | 'TEACHER' | 'STUDENT';
 
@@ -8,10 +10,10 @@ const addSeededPermissions = (role: Role, permissions: IPermission[]) => {
     permissions.filter((permission) => allowedPermissions.includes(permission.name));
 
   const allowedPermissions = {
-    ADMIN: ['VIEW_DASHBOARD', 'VIEW_PROFILE', 'ADD_CLASS', 'DELETE_CLASS', 'EDIT_CLASS'],
-    MANAGER: ['VIEW_PROFILE', 'ADD_CLASS', 'DELETE_CLASS', 'EDIT_CLASS'],
-    TEACHER: ['VIEW_PROFILE', 'ADD_CLASS', 'EDIT_CLASS'],
-    STUDENT: ['VIEW_PROFILE']
+    ADMIN: ['VIEW_DASHBOARD'],
+    MANAGER: ['ADD_CLASS', 'DELETE_CLASS'],
+    TEACHER: ['EDIT_CLASS'],
+    STUDENT: ['VIEW_CLASS']
   };
 
   if (allowedPermissions[role]) {
@@ -49,6 +51,30 @@ class RoleService {
     });
 
     await RoleModel.bulkSave([r1, r2, r3, r4]);
+  }
+  public async addRoleToUser(requestBody: any, userId: string) {
+    const { roles } = requestBody;
+
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User does not exist');
+    }
+
+    // Clear previous role
+    user.roles = [];
+    await user.save();
+
+    // Add role to user
+    for (const roleName of roles) {
+      const role = await RoleModel.findOne({ name: roleName });
+      if (!role) {
+        throw new NotFoundException(`Role ${roleName} does not exist`);
+      }
+      user.roles?.push(role);
+    }
+
+    await user.save();
   }
 }
 

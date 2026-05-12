@@ -10,6 +10,13 @@ export class RoleController {
       message: 'Role data seeded successfully'
     });
   }
+  public async addRoleToUser(req: Request, res: Response) {
+    await roleService.addRoleToUser(req.body, req.params.userId);
+
+    return res.status(HTTP_STATUS.OK).json({
+      message: 'Role added to user successfully'
+    });
+  }
 }
 
 export const roleController: RoleController = new RoleController();
