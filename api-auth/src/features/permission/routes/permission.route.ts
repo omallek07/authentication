@@ -4,6 +4,7 @@ import { permissionController } from '../controllers/permission.controller';
 
 const permissionRoute = express.Router();
 
+permissionRoute.get('/', asyncWrapper(permissionController.getAll));
 permissionRoute.post('/seed-data', asyncWrapper(permissionController.seedData));
 
 export default permissionRoute;

@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 
 export interface IPermission {
   name: string;
+  method: string;
+  path: string;
   description?: string;
 }
 
@@ -10,6 +12,14 @@ const permissionSchema = new mongoose.Schema<IPermission>({
     type: String,
     required: true,
     unique: true
+  },
+  method: {
+    type: String,
+    required: true
+  },
+  path: {
+    type: String,
+    required: true
   },
   description: {
     type: String

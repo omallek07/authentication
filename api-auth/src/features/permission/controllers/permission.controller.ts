@@ -10,6 +10,14 @@ export class PermissionController {
       message: 'Permission data seeded successfully'
     });
   }
+  public async getAll(req: Request, res: Response) {
+    const permissions = await permissionService.getAll();
+
+    return res.status(HTTP_STATUS.OK).json({
+      message: 'All permissions retrieved successfully',
+      data: permissions
+    });
+  }
 }
 
 export const permissionController: PermissionController = new PermissionController();

@@ -32,6 +32,11 @@ class PermissionService {
 
     await PermissionModel.bulkSave([p1, p2, p3, p4, p5]);
   }
+
+  public async getAll() {
+    const permissions = await PermissionModel.find();
+    return permissions;
+  }
 }
 
 export const permissionService: PermissionService = new PermissionService();
