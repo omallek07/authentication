@@ -1,5 +1,5 @@
 import { IPermission, PermissionModel } from '~/features/permission/models/permission.model';
-import { RoleModel } from '../models/role.model';
+import { IRole, RoleModel } from '../models/role.model';
 import { NotFoundException } from '~/globals/cores/error.core';
 import { UserModel } from '~/features/user/models/user.model';
 
@@ -52,6 +52,22 @@ class RoleService {
 
     await RoleModel.bulkSave([r1, r2, r3, r4]);
   }
+
+  public async getAll(): Promise<IRole[]> {
+    const roles = await RoleModel.find().select('-permissions -__v');
+    return roles;
+  }
+
+  public async getOne(roleId: string): Promise<IRole> {
+    const role = await RoleModel.findById(roleId).populate('permissions');
+
+    if (!role) {
+      throw new NotFoundException('Role does not exist');
+    }
+
+    return role;
+  }
+
   public async addRoleToUser(requestBody: any, userId: string) {
     const { roles } = requestBody;
 

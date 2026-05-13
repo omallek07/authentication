@@ -3,7 +3,7 @@ import { PermissionModel, IPermission } from '../models/permission.model';
 import { RoleModel } from '~/features/role/models/role.model';
 
 class PermissionService {
-  public async seedData() {
+  public async seedData(): Promise<void> {
     const permissionCollections = await PermissionModel.estimatedDocumentCount({});
 
     // Clear database
