@@ -18,6 +18,26 @@ export class PermissionController {
       data: permissions
     });
   }
+
+  public async updatePermission(req: Request, res: Response) {
+    const updatedPermission = await permissionService.updatePermission(req.params.permissionId, req.body);
+
+    return res.status(HTTP_STATUS.OK).json({
+      message: 'Permission updated successfully',
+      data: {
+        name: updatedPermission.name,
+        description: updatedPermission.description
+      }
+    });
+  }
+
+  public async addPermissionsToRole(req: Request, res: Response) {
+    await permissionService.addPermissionsToRole(req.body, req.params.roleId);
+
+    return res.status(HTTP_STATUS.OK).json({
+      message: 'Permissions added to role successfully'
+    });
+  }
 }
 
 export const permissionController: PermissionController = new PermissionController();
