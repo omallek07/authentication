@@ -64,7 +64,7 @@ class PermissionService {
     return permission;
   }
 
-  public async addPermissionsToRole(permissionIds: string[], roleId: string): Promise<void> {
+  public async addPermissionsToRole(permissionNames: string[], roleId: string): Promise<void> {
     const role = await RoleModel.findById(roleId).populate('permissions');
     if (!role) {
       throw new NotFoundException('Role does not exist');
@@ -73,11 +73,11 @@ class PermissionService {
     role.permissions = []; // Clear previous permissions
     await role.save();
 
-    for (const permissionId of permissionIds) {
-      const permission = await PermissionModel.findById(permissionId);
+    for (const permissionName of permissionNames) {
+      const permission = await PermissionModel.findOne({ name: permissionName });
 
       if (!permission) {
-        throw new NotFoundException(`Permission with ID ${permissionId} does not exist`);
+        throw new NotFoundException(`Permission with name ${permissionName} does not exist`);
       }
 
       role.permissions.push(permission);

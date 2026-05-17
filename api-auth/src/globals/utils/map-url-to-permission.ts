@@ -10,7 +10,7 @@ export const mapUrlToPermission = (route: IRoutePayload) => {
   let result = actionMap[route.method];
 
   // POST auth/signup => CREATE_AUTH_SIGNUP
-  const routeSegments = route.path.split('/');
+  const routeSegments = route.path.split('/').filter(Boolean);
   for (const segment of routeSegments) {
     const segmentUpperCase = segment.toUpperCase().replace(/:/g, '').replace(/-/g, '_'); // Remove ':' from route parameters
     result += `_${segmentUpperCase}`;

@@ -6,8 +6,8 @@ import { CustomError, NotFoundException } from './globals/cores/error.core';
 import HTTP_STATUS from './globals/constants/http.constant';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import { getAllRoutes } from './globals/utils/log-route';
-import { permissionProvider } from './globals/providers/permission.provider';
+// import { getAllRoutes } from './globals/utils/log-route';
+// import { permissionProvider } from './globals/providers/permission.provider';
 class Server {
   private app: Application;
 
@@ -36,8 +36,8 @@ class Server {
 
   private async setupRoutes(): Promise<void> {
     appRoutes(this.app);
-    const routes = getAllRoutes(this.app);
-    await permissionProvider.initPermissions(routes);
+    // const routes = getAllRoutes(this.app);
+    // await permissionProvider.initPermissions(routes);
   }
 
   private setupGlobalError(): void {
