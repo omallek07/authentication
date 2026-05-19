@@ -13,6 +13,7 @@ import ProtectedRoute from './routes/ProtectedRoute.tsx';
 import UnauthorizedRoute from './routes/UnauthorizedRoute.tsx';
 import ResetPasswordPage from './pages/reset-password/reset-password-page.tsx';
 import ForgotPasswordPage from './pages/forgot-password/forgot-password-page.tsx';
+import PermissionPage from './pages/permission/permission-page.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
   {
     path: '/forgot-password',
     element: <ForgotPasswordPage />,
+  },
+  {
+    path: '/permissions',
+    element: <PermissionPage />,
   },
 ]);
 

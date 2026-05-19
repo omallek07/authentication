@@ -43,3 +43,17 @@ interface IResetPasswordPayload {
 interface IUpdateUserProfileResponse {
   data: Pick<IUser, 'name'>;
 }
+
+interface IRole {
+  _id: string;
+  name: string;
+}
+interface IUser {
+  _id: string;
+  name: string;
+  email: string;
+  roles: IRole[];
+}
+interface IUsersResponse {
+  data: IUser[];
+}
