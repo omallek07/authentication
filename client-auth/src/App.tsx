@@ -1,9 +1,7 @@
+import { Navigate } from 'react-router';
+
 function App() {
-  return (
-    <>
-      <div>HELLO</div>
-    </>
-  );
+  return <Navigate to='/permissions' replace={true} />;
 }
 
 export default App;

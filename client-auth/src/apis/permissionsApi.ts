@@ -4,4 +4,10 @@ export const permissionsApi = {
   getAll() {
     return axiosInstance.get<unknown, IPermissionsResponse>('/permissions');
   },
+  addPermissionsToRole(roleId: string, permissions: string[]) {
+    return axiosInstance.post<unknown, unknown>(
+      `/permissions/add-permissions-to-role/${roleId}`,
+      permissions,
+    );
+  },
 };

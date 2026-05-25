@@ -53,8 +53,17 @@ class RoleService {
     await RoleModel.bulkSave([r1, r2, r3, r4]);
   }
 
-  public async getAll(): Promise<IRole[]> {
-    const roles = await RoleModel.find().select('-permissions -__v');
+  public async getAll(returnAllPermissions = false): Promise<IRole[]> {
+    let roles;
+
+    if (returnAllPermissions) {
+      roles = await RoleModel.find().select('-__v').populate({
+        path: 'permissions',
+        select: '-__v'
+      });
+    } else {
+      roles = await RoleModel.find().select('-permissions -__v');
+    }
     return roles;
   }
 

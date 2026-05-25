@@ -10,6 +10,7 @@ import {
   IPermissionsContext,
   PermissionsContext,
 } from '../context/permissionsContext';
+import { permissionsApi } from '../apis/permissionsApi';
 
 const RolesTable: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,7 +21,12 @@ const RolesTable: React.FC = () => {
     string[] | undefined
   >(undefined);
 
-  const { roles, loading: rolesLoading, error: rolesError } = useFetchRoles();
+  const includePermissions = true;
+  const {
+    roles,
+    loading: rolesLoading,
+    error: rolesError,
+  } = useFetchRoles(includePermissions);
 
   const {
     permissions,
@@ -31,30 +37,34 @@ const RolesTable: React.FC = () => {
   const loading = rolesLoading || permissionsLoading;
   const error = rolesError || permissionsError;
 
-  console.log('permissions', permissions);
-
   const showModal = (selectedRole: IRole) => {
     setSelectedRole(roles.find((r) => r._id === selectedRole._id));
     setIsModalOpen(true);
   };
-  const handleOk = () => {
+  const handleOk = async () => {
+    if (!selectedRole) {
+      return setIsModalOpen(false);
+    }
+
+    const newPermissions = selectedPermissions ?? [];
+    await permissionsApi.addPermissionsToRole(selectedRole._id, newPermissions);
     setIsModalOpen(false);
   };
   const handleCancel = () => {
+    setSelectedRole(undefined);
     setIsModalOpen(false);
   };
 
   const handleSelectPermissions = (permissionNames: string[] | undefined) => {
-    console.log('permissiosn', permissions);
     setSelectedPermissions(permissionNames);
   };
-
-  console.log('selectedRole', selectedRole);
 
   const modalOptions = permissions.map((p) => ({
     value: p.name,
     label: p.name,
   }));
+
+  const defaultValues = selectedRole?.permissions?.map((p) => p.name);
 
   const columns: TableProps<IRole>['columns'] = [
     {
@@ -88,6 +98,8 @@ const RolesTable: React.FC = () => {
       <PermissionModal
         isModalOpen={isModalOpen}
         options={modalOptions}
+        values={selectedPermissions}
+        defaultValues={defaultValues}
         handleOk={handleOk}
         handleCancel={handleCancel}
         changeHandler={handleSelectPermissions}

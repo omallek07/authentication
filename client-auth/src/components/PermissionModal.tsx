@@ -5,10 +5,8 @@ type PermissionModalProps = {
     label: string;
     value: string;
   }>;
-  defaultValue?: Array<{
-    label: string;
-    value: string;
-  }>;
+  values: string[] | undefined;
+  defaultValues?: string[];
   handleOk: () => void;
   handleCancel: () => void;
   changeHandler: (values: string[] | undefined) => void;
@@ -16,6 +14,8 @@ type PermissionModalProps = {
 };
 
 export const PermissionModal = ({
+  values,
+  defaultValues,
   options,
   handleOk,
   handleCancel,
@@ -37,6 +37,8 @@ export const PermissionModal = ({
           style={{ width: '100%' }}
           placeholder='Please select permissions'
           onChange={changeHandler}
+          defaultValue={defaultValues}
+          value={values}
           options={options}
         />
       </Modal>

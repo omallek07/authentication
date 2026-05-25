@@ -7,7 +7,6 @@ import { UserModel } from '~/features/user/models/user.model';
 class AuthMiddleware {
   public async verifyUser(req: Request, res: Response, next: NextFunction) {
     const token = req.headers.authorization?.split(' ')[1];
-
     if (!req.headers.authorization || !token) {
       return next(new UnAuthorizedException('NO_TOKEN'));
     }
@@ -58,8 +57,6 @@ class AuthMiddleware {
 
     const method = req.method;
     const path = `${req.baseUrl}${req.route.path}`.replace('/api/v1/', '').replace(/\/+$/, '');
-
-    console.log('path', path);
 
     const hasPermission = allPermissions.some((perm) => perm.method === method && perm.path === path);
 

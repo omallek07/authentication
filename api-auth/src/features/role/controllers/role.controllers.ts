@@ -11,7 +11,14 @@ export class RoleController {
   }
 
   public async getAll(req: Request, res: Response) {
-    const roles = await roleService.getAll();
+    const includePermissions = req.query['include-permissions'];
+
+    let returnAllPermissions = false;
+    if (typeof includePermissions === 'string' && includePermissions.toLowerCase() === 'true') {
+      returnAllPermissions = true;
+    }
+
+    const roles = await roleService.getAll(returnAllPermissions);
 
     return res.status(HTTP_STATUS.OK).json({
       message: 'All roles retrieved successfully',

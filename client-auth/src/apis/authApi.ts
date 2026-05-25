@@ -17,6 +17,7 @@ export const authApi = {
     return axiosInstance.get('/auth/protected');
   },
   refreshToken() {
+    console.log('attempt refresh');
     return axiosInstance.post<unknown, IRefreshTokenResponse>(
       '/auth/refresh-token',
     );
