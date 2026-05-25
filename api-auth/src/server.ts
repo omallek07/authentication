@@ -38,6 +38,7 @@ class Server {
     appRoutes(this.app);
     // const routes = getAllRoutes(this.app);
     // await permissionProvider.initPermissions(routes);
+    // permissionProvider.addAllPermsToAdmin();
   }
 
   private setupGlobalError(): void {

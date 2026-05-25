@@ -57,7 +57,9 @@ class AuthMiddleware {
     const allPermissions = roles.flatMap((role) => role.permissions);
 
     const method = req.method;
-    const path = `${req.baseUrl}${req.route.path}`.replace('/api/v1/', '');
+    const path = `${req.baseUrl}${req.route.path}`.replace('/api/v1/', '').replace(/\/+$/, '');
+
+    console.log('path', path);
 
     const hasPermission = allPermissions.some((perm) => perm.method === method && perm.path === path);
 

@@ -20,11 +20,11 @@ export class RoleController {
   }
 
   public async getOne(req: Request, res: Response) {
-    const roles = await roleService.getOne(req.params.roleId);
+    const role = await roleService.getOne(req.params.roleId);
 
     return res.status(HTTP_STATUS.OK).json({
       message: 'Role retrieved successfully',
-      data: roles
+      data: role
     });
   }
 

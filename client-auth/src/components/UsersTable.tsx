@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
 import { Flex, Space, Table, Tag } from 'antd';
 import type { TableProps } from 'antd';
-import { userApi } from '../apis/userApi';
+import { useFetchUsers } from '../hooks/useFetchUsers';
 
 const columns: TableProps<IUser>['columns'] = [
   {
@@ -56,24 +55,10 @@ const columns: TableProps<IUser>['columns'] = [
 ];
 
 const UsersTable: React.FC = () => {
-  const [users, setUsers] = useState<IUser[]>([]);
+  const { users, loading: usersLoading, error: usersError } = useFetchUsers();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await userApi.getAll();
-        setUsers(
-          response?.data.map((user) => ({ ...user, key: user._id })) || [],
-        );
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
-    };
-    fetchUsers();
-  }, []);
-
-  console.log(users);
-
+  if (usersLoading) return <p>Loading users...</p>;
+  if (usersError) return <p>Error loading users: {usersError.message}</p>;
   return <Table<IUser> columns={columns} dataSource={users} />;
 };
 

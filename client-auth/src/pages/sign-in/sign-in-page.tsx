@@ -77,7 +77,7 @@ export default function SignInPage() {
             name='password'
             rules={[
               { required: true, message: 'Please enter your password' },
-              { min: 8, message: 'Password must be at least 8 characters' },
+              { min: 5, message: 'Password must be at least 5 characters' },
             ]}
           >
             <Input.Password

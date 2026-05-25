@@ -98,6 +98,7 @@ class AuthService {
     }
 
     const userDecoded = await jwtProvider.verifyRefreshToken(refreshToken);
+    console.log('userDecoded', userDecoded);
 
     const user = await UserModel.findById(userDecoded._id).populate('roles');
 

@@ -5,8 +5,10 @@ import { authMiddleware } from '~/globals/middlewares/auth.middleware';
 
 const userRoute = express.Router();
 
-// userRoute.use(authMiddleware.verifyUser); // Authentication
+userRoute.use(authMiddleware.verifyUser); // Authentication
 
-userRoute.get('/', asyncWrapper(userController.getAllUsers));
+userRoute.get('/', authMiddleware.verifyPermission, asyncWrapper(userController.getAllUsers));
+
+userRoute.get('/:userId', authMiddleware.verifyPermission, asyncWrapper(userController.getUser));
 
 export default userRoute;

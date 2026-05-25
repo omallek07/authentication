@@ -51,6 +51,8 @@ axiosInstance.interceptors.response.use(
     }
 
     if (message === 'TOKEN_EXPIRED') {
+      console.log('Access token expired. Attempting to refresh token...');
+
       try {
         const resRT = await authApi.refreshToken();
         // Update user store with new accessToken and user data

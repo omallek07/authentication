@@ -1,6 +1,16 @@
 import { UserModel } from '../models/user.model';
 
 class UserService {
+  public async getUser(userId: string) {
+    const user = await UserModel.findById(userId)
+      .select('-password -__v -resetPasswordToken -resetPasswordExpires -resetPasswordExpired')
+      .populate({
+        path: 'roles',
+        select: '-__v'
+      });
+
+    return user;
+  }
   public async getAll() {
     const users = await UserModel.find()
       .select('-password -__v -resetPasswordToken -resetPasswordExpires -resetPasswordExpired')
