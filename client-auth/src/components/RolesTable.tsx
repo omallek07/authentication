@@ -11,6 +11,7 @@ import {
   PermissionsContext,
 } from '../context/permissionsContext';
 import { permissionsApi } from '../apis/permissionsApi';
+import { toast } from 'react-toastify';
 
 const RolesTable: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,6 +49,8 @@ const RolesTable: React.FC = () => {
 
     const newPermissions = selectedPermissions ?? [];
     await permissionsApi.addPermissionsToRole(selectedRole._id, newPermissions);
+    setSelectedRole(undefined);
+    toast.success('Permissions updated successfully!');
     setIsModalOpen(false);
   };
   const handleCancel = () => {

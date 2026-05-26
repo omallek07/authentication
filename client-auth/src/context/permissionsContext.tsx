@@ -6,6 +6,7 @@ export interface IPermissionsContext {
   permissions: IPermission[];
   error: string;
   loading: boolean;
+  reload: () => void;
 }
 
 const PermissionsContext = createContext<IPermissionsContext | null>(null);
@@ -43,6 +44,7 @@ const PermissionsProvider = ({ children }: { children: ReactNode }) => {
       permissions,
       loading,
       error,
+      reload: fetchPermissions,
     }),
     [permissions, loading, error],
   );

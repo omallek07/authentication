@@ -10,4 +10,15 @@ export const permissionsApi = {
       permissions,
     );
   },
+  updatePermission(
+    permissionId: string,
+    data: {
+      name: string;
+    },
+  ) {
+    return axiosInstance.put<unknown, unknown>(
+      `/permissions/${permissionId}`,
+      data,
+    );
+  },
 };
