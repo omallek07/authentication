@@ -7,7 +7,7 @@ const columns: TableProps<IUser>['columns'] = [
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
-    render: (text) => <a>{text}</a>,
+    render: (text) => <a>{text.slice(0, 1).toUpperCase() + text.slice(1)}</a>,
   },
   {
     title: 'Email',
@@ -21,6 +21,7 @@ const columns: TableProps<IUser>['columns'] = [
     render: (_, { roles }) => (
       <Flex gap='small' align='center' wrap>
         {roles.map((role) => {
+          console.log('role', role);
           let color = 'blue';
           switch (role.name) {
             case 'admin':

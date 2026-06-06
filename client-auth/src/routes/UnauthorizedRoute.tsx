@@ -1,11 +1,9 @@
-import { Navigate } from 'react-router';
+import { Navigate, Outlet } from 'react-router';
 import { useUserStore } from '../stores';
 
 export default function UnauthorizedRoute({
-  children,
   redirectTo = '/profile',
 }: {
-  children: React.ReactNode;
   redirectTo?: string;
 }) {
   const isAuthenticated = useUserStore((state) => state.isAuthenticated);
@@ -14,5 +12,5 @@ export default function UnauthorizedRoute({
     return <Navigate to={redirectTo} replace={true} />;
   }
 
-  return children;
+  return <Outlet />;
 }

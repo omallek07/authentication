@@ -14,7 +14,7 @@ export default function AuthorizationRoute({
 
   if (isLoading) return <div>Loading...</div>;
 
-  if (hasPermission(requiredPermission)) {
+  if (!hasPermission(requiredPermission)) {
     return <Navigate to={redirectTo} replace={true} />;
   }
 

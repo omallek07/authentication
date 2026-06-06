@@ -80,7 +80,9 @@ const RolesTable: React.FC = () => {
       title: 'Role',
       dataIndex: 'name',
       key: 'name',
-      render: (text) => <a>{text}</a>,
+      render: (text) => (
+        <a>{text.slice(0, 1).toUpperCase() + text.slice(1, text.length)}</a>
+      ),
     },
     {
       title: 'Description',

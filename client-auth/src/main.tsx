@@ -15,63 +15,58 @@ import ResetPasswordPage from './pages/reset-password/reset-password-page.tsx';
 import ForgotPasswordPage from './pages/forgot-password/forgot-password-page.tsx';
 import PermissionPage from './pages/permission/permission-page.tsx';
 import AccessDeniedPage from './pages/access-denied/access-denied-page.tsx';
+import AuthorizationRoute from './routes/AuthorizationRoute.tsx';
 
 export const router = createBrowserRouter([
   {
-    path: '/',
-    element: (
-      <ProtectedRoute>
-        <App />
-      </ProtectedRoute>
-    ),
+    element: <UnauthorizedRoute />,
+    children: [
+      {
+        path: 'sign-in',
+        element: <SignInPage />,
+      },
+      {
+        path: 'sign-up',
+        element: <SignUpPage />,
+      },
+      {
+        path: '/forgot-password',
+        element: <ForgotPasswordPage />,
+      },
+      {
+        path: '/reset-password',
+        element: <ResetPasswordPage />,
+      },
+    ],
   },
   {
-    path: '/access-denied',
-    element: <AccessDeniedPage />,
-  },
-  {
-    path: '/sign-in',
-    element: (
-      <UnauthorizedRoute>
-        <SignInPage />
-      </UnauthorizedRoute>
-    ),
-  },
-  {
-    path: '/sign-up',
-    element: (
-      <UnauthorizedRoute>
-        <SignUpPage />
-      </UnauthorizedRoute>
-    ),
-  },
-  {
-    path: '/access',
-    element: (
-      <ProtectedRoute>
-        <AccessPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/profile',
-    element: (
-      <ProtectedRoute>
-        <ProfilePage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/reset-password',
-    element: <ResetPasswordPage />,
-  },
-  {
-    path: '/forgot-password',
-    element: <ForgotPasswordPage />,
-  },
-  {
-    path: '/permissions',
-    element: <PermissionPage />,
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: '/',
+        element: <App />,
+      },
+      {
+        path: '/access',
+        element: <AccessPage />,
+      },
+      {
+        path: '/profile',
+        element: <ProfilePage />,
+      },
+      {
+        path: '/access-denied',
+        element: <AccessDeniedPage />,
+      },
+      {
+        path: '/permissions',
+        element: (
+          <AuthorizationRoute requiredPermission='VIEW_PERMISSIONS'>
+            <PermissionPage />
+          </AuthorizationRoute>
+        ),
+      },
+    ],
   },
 ]);
 

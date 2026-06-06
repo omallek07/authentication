@@ -6,6 +6,7 @@ export const usePermission = () => {
   const [permissions, setPermissions] = useState<{
     [key: string]: boolean;
   }>({});
+
   const [isLoading, setLoading] = useState(true);
 
   const user = useUserStore((state) => state.user);

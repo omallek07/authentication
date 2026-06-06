@@ -10,7 +10,6 @@ export const useFetchRoles = (includePermissions = false) => {
     setLoading(true);
     setError(null);
     try {
-      console.log('includePermissions', includePermissions);
       const response = await rolesApi.getAll(includePermissions);
       setRoles(
         response?.data.map((role) => ({ ...role, key: role._id })) || [],
