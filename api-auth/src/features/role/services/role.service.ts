@@ -77,6 +77,24 @@ class RoleService {
     return role;
   }
 
+  public async getPermissions(roles: string[]) {
+    if (!roles) {
+      throw new NotFoundException('Roles not provided!');
+    }
+
+    const roleDocs = await RoleModel.find({
+      name: {
+        $in: roles
+      }
+    }).populate('permissions');
+
+    const permissions = roleDocs.flatMap((role) => role.permissions);
+
+    const permissionsNames = permissions.map((perm) => perm.name);
+    // Remove duplicate permissions
+    return [...new Set(permissionsNames)];
+  }
+
   public async addRoleToUser(requestBody: any, userId: string) {
     const { roles } = requestBody;
 

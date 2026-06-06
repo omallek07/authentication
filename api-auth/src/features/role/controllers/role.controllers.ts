@@ -35,6 +35,17 @@ export class RoleController {
     });
   }
 
+  public async getPermissions(req: Request, res: Response) {
+    const roles = req.query.roleNames as string;
+
+    const permissions = await roleService.getPermissions(roles.split(','));
+
+    return res.status(HTTP_STATUS.OK).json({
+      message: 'Permissions retrieved successfully',
+      data: permissions
+    });
+  }
+
   public async addRoleToUser(req: Request, res: Response) {
     await roleService.addRoleToUser(req.body, req.params.userId);
 

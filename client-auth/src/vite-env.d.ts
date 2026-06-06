@@ -8,7 +8,7 @@ interface IUser {
   _id: string;
   name: string;
   email: string;
-  roles: IRole[];
+  roles: string[];
 }
 interface IUserSignInPayload {
   email: string;

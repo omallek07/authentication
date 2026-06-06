@@ -9,4 +9,13 @@ export const rolesApi = {
   getRole(roleId: string) {
     return axiosInstance.get<unknown, IRoleResponse>(`/roles/${roleId}`);
   },
+  getPermissionsByRoleNames(roleNames: string) {
+    console.log('roleNames', roleNames);
+    return axiosInstance.get<
+      unknown,
+      {
+        data: string[];
+      }
+    >(`/roles/by?roleNames=${roleNames}`);
+  },
 };

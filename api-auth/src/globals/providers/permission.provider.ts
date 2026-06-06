@@ -3,11 +3,16 @@ import { mapUrlToPermission } from '../utils/map-url-to-permission';
 import { RoleModel } from '~/features/role/models/role.model';
 import { NotFoundException } from '../cores/error.core';
 
+const ignoredPaths = ['auth/sign-in', 'auth/sign-up', 'auth/refresh-token', 'roles/by'];
 export class PermissionProvider {
   public async initPermissions(routes: IRoutePayload[]) {
     await PermissionModel.deleteMany({});
 
     for (const route of routes) {
+      if (ignoredPaths.some((path) => path === route.path)) {
+        continue;
+      }
+
       const permissionName = mapUrlToPermission(route);
       // Here you can save the permissionName to your database or in-memory store
       await new PermissionModel({ name: permissionName, method: route.method, path: route.path }).save();

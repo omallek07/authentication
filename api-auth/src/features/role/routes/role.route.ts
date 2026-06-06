@@ -9,6 +9,8 @@ roleRoute.use(authMiddleware.verifyUser); // Authentication
 
 roleRoute.get('/', authMiddleware.verifyPermission, asyncWrapper(roleController.getAll));
 
+roleRoute.get('/by', asyncWrapper(roleController.getPermissions));
+
 roleRoute.get('/:roleId', authMiddleware.verifyPermission, asyncWrapper(roleController.getOne));
 
 roleRoute.post('/seed-data', authMiddleware.verifyPermission, asyncWrapper(roleController.seedData));

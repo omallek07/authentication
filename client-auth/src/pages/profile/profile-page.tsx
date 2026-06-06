@@ -17,15 +17,20 @@ import Header from '../../components/Header';
 import LogoutButton from '../../components/LogoutButton';
 import { authApi } from '../../apis/authApi';
 import { toast } from 'react-toastify';
+import { usePermission } from '../../hooks/usePermission';
+import { useNavigate } from 'react-router';
 
-const { Title, Paragraph, Text } = Typography;
-const { TextArea } = Input;
+const { Paragraph, Text } = Typography;
 
 export default function ProfilePage() {
+  const navigate = useNavigate();
+
   const [form] = Form.useForm();
 
   const user = useUserStore((state) => state.user);
   const updateUserData = useUserStore((state) => state.updateUserData);
+
+  const { hasPermission } = usePermission();
 
   const [userData, setUserData] = useState({
     name: user?.name ?? '',
@@ -61,6 +66,13 @@ export default function ProfilePage() {
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '24px' }}>
       <Header />
+      <div
+        style={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}
+      >
+        <Button onClick={() => navigate('/permissions')}>
+          View Permissions Dashboard
+        </Button>
+      </div>
       <Card style={{ borderRadius: '8px' }}>
         <div
           style={{
@@ -92,6 +104,7 @@ export default function ProfilePage() {
               defaultValue={name}
             />
             <Button
+              disabled={!hasPermission('UPDATE_AUTH_UPDATE_PROFILE')}
               onClick={handleChangeName}
               style={{
                 margin: '10px 0',
