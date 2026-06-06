@@ -59,6 +59,12 @@ const RolesTable: React.FC = () => {
   };
 
   const handleSelectPermissions = (permissionNames: string[] | undefined) => {
+    if (permissionNames?.includes('all')) {
+      setSelectedPermissions(permissions.map((p) => p.name));
+    }
+    if (permissionNames?.includes('clear')) {
+      setSelectedPermissions(undefined);
+    }
     setSelectedPermissions(permissionNames);
   };
 

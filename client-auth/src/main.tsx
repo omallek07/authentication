@@ -14,6 +14,7 @@ import UnauthorizedRoute from './routes/UnauthorizedRoute.tsx';
 import ResetPasswordPage from './pages/reset-password/reset-password-page.tsx';
 import ForgotPasswordPage from './pages/forgot-password/forgot-password-page.tsx';
 import PermissionPage from './pages/permission/permission-page.tsx';
+import AccessDeniedPage from './pages/access-denied/access-denied-page.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
         <App />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: '/access-denied',
+    element: <AccessDeniedPage />,
   },
   {
     path: '/sign-in',

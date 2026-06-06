@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router';
 
 function App() {
-  return <Navigate to='/permissions' replace={true} />;
+  return <Navigate to='/profile' replace={true} />;
 }
 
 export default App;

@@ -6,24 +6,29 @@ export const usePermission = () => {
   const [permissions, setPermissions] = useState<{
     [key: string]: boolean;
   }>({});
+  const [isLoading, setLoading] = useState(true);
 
   const user = useUserStore((state) => state.user);
 
   useEffect(() => {
     const fetchPermissions = async () => {
-      const res = await rolesApi.getPermissionsByRoleNames(
-        user?.roles?.join(',') ?? '',
-      );
+      setLoading(true);
+      try {
+        const res = await rolesApi.getPermissionsByRoleNames(
+          user?.roles?.join(',') ?? '',
+        );
+        const permMap: {
+          [key: string]: boolean;
+        } = {};
 
-      const permMap: {
-        [key: string]: boolean;
-      } = {};
+        res.data.forEach((perm) => {
+          permMap[perm] = true;
+        });
 
-      res.data.forEach((perm) => {
-        permMap[perm] = true;
-      });
-
-      setPermissions(permMap);
+        setPermissions(permMap);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchPermissions();
@@ -35,6 +40,7 @@ export const usePermission = () => {
   };
 
   return {
+    isLoading,
     permissions,
     hasPermission,
   };

@@ -39,7 +39,11 @@ export const PermissionModal = ({
           onChange={changeHandler}
           defaultValue={defaultValues}
           value={values}
-          options={options}
+          options={[
+            { label: 'Select All', value: 'all' },
+            { label: 'Clear All', value: 'clear' },
+            ...options,
+          ]}
         />
       </Modal>
     </div>
