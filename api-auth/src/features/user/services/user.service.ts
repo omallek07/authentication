@@ -21,6 +21,8 @@ class UserService {
 
     return users;
   }
+
+  public async getTwoFactorAuthQR(currentUser: UserPayload) {}
 }
 
 export const userService: UserService = new UserService();

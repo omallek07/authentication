@@ -21,6 +21,14 @@ class UserController {
       data: users
     });
   }
+
+  public async getTwoFactorAuthQR(req: Request, res: Response) {
+    const data = await userService.getTwoFactorAuthQR(req.currentUser);
+    return res.status(HTTP_STATUS.OK).json({
+      message: 'Two-factor authentication QR code retrieved successfully',
+      data
+    });
+  }
 }
 
 export const userController: UserController = new UserController();

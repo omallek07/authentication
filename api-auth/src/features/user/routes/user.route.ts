@@ -11,4 +11,6 @@ userRoute.get('/', authMiddleware.verifyPermission, asyncWrapper(userController.
 
 userRoute.get('/:userId', authMiddleware.verifyPermission, asyncWrapper(userController.getUser));
 
+userRoute.get('/2fa-qr', asyncWrapper(userController.getTwoFactorAuthQR));
+
 export default userRoute;

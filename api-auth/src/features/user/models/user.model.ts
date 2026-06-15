@@ -7,7 +7,8 @@ export interface IUser {
   password: string;
   resetPasswordToken?: string;
   resetPasswordExpired?: number;
-  roles?: IRole[];
+  isEnabled2FA: boolean;
+  roles: IRole[];
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -30,6 +31,10 @@ const userSchema = new mongoose.Schema<IUser>({
   resetPasswordExpired: {
     type: Number,
     default: null
+  },
+  isEnabled2FA: {
+    type: Boolean,
+    default: false
   },
   roles: [
     {
